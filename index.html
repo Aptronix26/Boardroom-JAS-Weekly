@@ -532,6 +532,16 @@
   }
 }
 
+/* Keep Boardroom actions inside their narrow panel at every desktop width. */
+#boardroom .priority .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#boardroom .priority .action{min-width:0;min-height:118px;overflow-wrap:anywhere}
+.re-formula-summary{margin-top:12px!important;width:100%;box-sizing:border-box}
+.re-formula-summary .formula-hero{padding:12px;border-radius:10px;background:#f3f7fc;border:1px solid #d8e3f0;font-weight:800;color:#10243e;overflow-wrap:anywhere}
+.re-formula-summary .formula-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.re-formula-summary .formula-item{padding:10px;border:1px solid #dfe6ef;border-radius:10px;background:#fff;min-width:0;font-size:10.5px;line-height:1.45;overflow-wrap:anywhere}
+.re-formula-summary .formula-item b{display:block;margin-bottom:4px;color:#10243e}
+.re-formula-summary .formula-note{margin:10px 0 0;color:#657287;font-size:10.5px;line-height:1.45}
+@media(max-width:900px){#boardroom .priority .actions,.re-formula-summary .formula-grid{grid-template-columns:1fr!important}}
 </style><link href="./ui-refresh.css" rel="stylesheet"/><link href="./governance.css?v=20260831-1" rel="stylesheet"/></head><body><div class="app">
 <aside class="sidebar"><div class="brand">APTRONIX<small>RETAIL INTELLIGENCE OS 2.0</small></div><div class="menu">
 <button class="active" data-id="overview">⌂ Executive Overview</button><button data-id="executive">▣ Executive Dashboard</button><button data-id="boardroom">▥ Boardroom Intelligence</button><button data-id="store">▦ Store Explorer</button><button data-id="arm">⌕ ARM Explorer</button><button data-id="retail">◎ Retail Excellence</button></div>
@@ -650,4 +660,29 @@ if(armNameFilter.value==='All' && DATA.arms.length){
  armNameFilter.value=DATA.arms[0].arm;
 }
 applyArmNameFilter();
+</script><script>
+(()=>{
+ const clampText='Every component is capped between 0 and 100.';
+ const compactMethod=`<h3>Retail Excellence Calculation Methodology</h3><div class="mgrid"><div>• Revenue Growth — 25%</div><div>• Conversion Growth — 20%</div><div>• Loan Attach — 15%</div><div>• Trade-in — 10%</div><div>• Revenue/Sq Ft — 10%</div><div>• Risk / RAG — 10%</div></div><p class="formula-note">Active weights total 90%; the final score is divided by 90% because Attach Quality is excluded from this workbook.</p>`;
+ document.querySelectorAll('.method h3').forEach(heading=>{
+   if(heading.textContent.trim()==='Retail Excellence Calculation Methodology') heading.parentElement.innerHTML=compactMethod;
+ });
+ const boardroom=document.getElementById('boardroom');
+ if(boardroom && !boardroom.querySelector('.re-formula-summary')){
+   const summary=document.createElement('section');
+   summary.className='method re-formula-summary';
+   summary.setAttribute('aria-label','Retail Excellence score formula');
+   summary.innerHTML=`<h3>Retail Excellence — Score Mathematics</h3>
+   <div class="formula-hero">Final RE Score = ROUND((Growth×25% + Conversion×20% + Loan×15% + Trade-in×10% + Productivity×10% + Risk×10%) ÷ 90%, 1)</div>
+   <div class="formula-grid">
+    <div class="formula-item"><b>Revenue Growth Score</b>MAX(0, MIN(100, 50 + Wk9-vs-Wk8 revenue growth × 200))</div>
+    <div class="formula-item"><b>Conversion Score</b>MAX(0, MIN(100, 50 + (Wk9 conversion − Wk8 conversion) × 1,000))</div>
+    <div class="formula-item"><b>Loan Score</b>MAX(0, MIN(100, Wk8 overall loan attach ÷ 25% × 100))</div>
+    <div class="formula-item"><b>Trade-in Score</b>MAX(0, MIN(100, Wk8 iPhone trade-in attach ÷ 10% × 100))</div>
+    <div class="formula-item"><b>Productivity Score</b>MAX(0, MIN(100, Wk8 revenue/sq ft ÷ average Wk8 store revenue/sq ft × 100))</div>
+    <div class="formula-item"><b>Risk Score</b>Green = 100 · Amber = 65 · Red = 35</div>
+   </div><p class="formula-note">${clampText} Attachment and productivity inputs follow the workbook's Wk8 scoring reference. Attach Quality is excluded because its raw source is unavailable, so the active 90% weight is normalized back to a 100-point scale.</p>`;
+   boardroom.appendChild(summary);
+ }
+})();
 </script><script src="./ui-refresh.js"></script><script src="./governance.js?v=20260829-2"></script></body></html>

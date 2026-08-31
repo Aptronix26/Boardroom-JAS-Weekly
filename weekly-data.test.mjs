@@ -14,6 +14,14 @@ assert.equal(data.arms.length, 15);
 assert.equal(new Set(data.stores.map(row => row.store)).size, 69);
 assert.equal(new Set(data.arms.map(row => row.arm)).size, 15);
 assert.ok(data.stores.every(row => data.arms.some(arm => arm.arm === row.arm)));
+for (const row of data.stores) {
+  const recomputed = Math.round(((
+    row.growthScore * 0.25 + row.conversionScore * 0.20 +
+    row.loanScore * 0.15 + row.tradeScore * 0.10 +
+    row.revSqFtScore * 0.10 + row.riskScore * 0.10
+  ) / 0.90) * 10) / 10;
+  assert.ok(close(recomputed, row.reScore, 0.051), `Retail Excellence mismatch for ${row.store}`);
+}
 
 assert.ok(close(sum(data.stores, "wk13Revenue"), 377726825.96));
 assert.ok(close(sum(data.stores, "wk1Revenue"), 324599908.46));
@@ -34,4 +42,11 @@ assert.doesNotMatch(config, /\.xlsx/i);
 
 assert.doesNotMatch(html, /Wk8 vs Wk7|Wk7 → Wk8|25 Aug 2026|20260825/);
 assert.doesNotMatch(html, />Actual</);
+for (const text of [
+  "Retail Excellence — Score Mathematics",
+  "Growth×25% + Conversion×20% + Loan×15% + Trade-in×10% + Productivity×10% + Risk×10%",
+  "Wk8 overall loan attach ÷ 25% × 100",
+  "Green = 100 · Amber = 65 · Red = 35"
+]) assert.ok(html.includes(text), `missing Retail Excellence methodology: ${text}`);
+assert.ok(html.includes("#boardroom .priority .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}"));
 console.log("Weekly Wk9 vs Wk8 data model validated: 69 stores, 15 ARMs");
