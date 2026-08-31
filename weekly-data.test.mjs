@@ -15,21 +15,23 @@ assert.equal(new Set(data.stores.map(row => row.store)).size, 69);
 assert.equal(new Set(data.arms.map(row => row.arm)).size, 15);
 assert.ok(data.stores.every(row => data.arms.some(arm => arm.arm === row.arm)));
 
-assert.ok(close(sum(data.stores, "wk13Revenue"), 626057168.64));
-assert.ok(close(sum(data.stores, "wk1Revenue"), 377726825.96));
-assert.ok(close(sum(data.arms, "wk13Revenue"), 626057168.64));
-assert.ok(close(sum(data.arms, "wk1Revenue"), 377726825.96));
-assert.ok(close(sum(data.stores, "wk13Footfall"), 177449));
-assert.ok(close(sum(data.stores, "wk1Footfall"), 135280));
-assert.ok(close(sum(data.stores, "wk13Invoices"), 12049));
-assert.ok(close(sum(data.stores, "wk1Invoices"), 8613));
+assert.ok(close(sum(data.stores, "wk13Revenue"), 377726825.96));
+assert.ok(close(sum(data.stores, "wk1Revenue"), 324599908.46));
+assert.ok(close(sum(data.arms, "wk13Revenue"), 377726825.96));
+assert.ok(close(sum(data.arms, "wk1Revenue"), 324599908.46));
+assert.ok(close(sum(data.stores, "wk13Footfall"), 138587));
+assert.ok(close(sum(data.stores, "wk1Footfall"), 137108));
+assert.ok(close(sum(data.stores, "wk13Invoices"), 8613));
+assert.ok(close(sum(data.stores, "wk1Invoices"), 7849));
 
 for (const text of [
-  "Wk8 vs Wk7", "₹37.77 Cr", "₹62.61 Cr", "6.4%", "21.1%", "19.8%",
-  "2,450", "660", "309", "183", "432",
+  "Wk9 vs Wk8", "₹32.46 Cr", "₹37.77 Cr", "5.7%", "20.8%", "16.3%",
+  "1,973", "590", "309", "235", "498",
   "Begumpet", "Abdul Khadeer", "69 store rows", "15 ARM rows"
 ]) assert.ok(html.includes(text), `missing dashboard evidence: ${text}`);
-assert.ok(config.includes("WOW Wk7 Wk8 Performance V2.xlsx"));
+assert.ok(config.includes('source: "Validated weekly performance workbook"'));
+assert.doesNotMatch(config, /\.xlsx/i);
 
-assert.doesNotMatch(html, /Wk7 vs Wk6|Wk6 → Wk7|20260822/);
-console.log("Weekly Wk8 vs Wk7 data model validated: 69 stores, 15 ARMs");
+assert.doesNotMatch(html, /Wk8 vs Wk7|Wk7 → Wk8|25 Aug 2026|20260825/);
+assert.doesNotMatch(html, />Actual</);
+console.log("Weekly Wk9 vs Wk8 data model validated: 69 stores, 15 ARMs");
