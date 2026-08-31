@@ -20,7 +20,7 @@ for (const row of data.stores) {
   assert.ok(close(row.growthScore, cap(50 + row.growth * 200), 1e-9), `Growth score mismatch for ${row.store}`);
   assert.ok(close(row.conversionScore, cap(50 + row.conversionChange * 1000), 1e-9), `Conversion score mismatch for ${row.store}`);
   assert.ok(close(row.loanScore, cap(row.wk1Loan / 0.25 * 100), 1e-9), `Wk9 loan score mismatch for ${row.store}`);
-  assert.ok(close(row.tradeScore, cap(row.wk1Trade / 0.10 * 100), 1e-9), `Wk9 trade-in score mismatch for ${row.store}`);
+  assert.ok(close(row.tradeScore, cap(row.wk1Trade / 0.20 * 100), 1e-9), `Wk9 trade-in score mismatch for ${row.store}`);
   assert.ok(close(row.revSqFtScore, cap(row.wk1RevSqFt / avgWk9Productivity * 100), 1e-9), `Wk9 productivity score mismatch for ${row.store}`);
   const recomputed = Math.round(((
     row.growthScore * 0.25 + row.conversionScore * 0.15 +
