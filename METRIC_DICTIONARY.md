@@ -16,7 +16,7 @@
 | Revenue Growth score | MAX(0, MIN(100, 50 + Wk9-vs-Wk8 revenue growth × 200)) |
 | Conversion Growth score | MAX(0, MIN(100, 50 + (Wk9 conversion − Wk8 conversion) × 1,000)) |
 | Loan Attach score | MAX(0, MIN(100, Wk9 overall loan attach ÷ 25% × 100)) |
-| Trade-in score | MAX(0, MIN(100, Wk9 iPhone trade-in attach ÷ 10% × 100)) |
+| Trade-in score | MAX(0, MIN(100, Wk9 iPhone trade-in attach ÷ 20% × 100)) |
 | Revenue/Sq Ft score | MAX(0, MIN(100, Wk9 revenue/sq ft ÷ average Wk9 store revenue/sq ft × 100)) |
 | Risk/RAG score | Green = 100; Amber = 65; Red = 35 |
 | Retail Excellence score | ROUND(Revenue Growth score × 25% + Conversion score × 15% + Loan score × 20% + Trade-in score × 20% + Revenue/Sq Ft score × 10% + Risk score × 10%, 1) |
