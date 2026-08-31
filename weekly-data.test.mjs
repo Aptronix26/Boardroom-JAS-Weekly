@@ -14,14 +14,22 @@ assert.equal(data.arms.length, 15);
 assert.equal(new Set(data.stores.map(row => row.store)).size, 69);
 assert.equal(new Set(data.arms.map(row => row.arm)).size, 15);
 assert.ok(data.stores.every(row => data.arms.some(arm => arm.arm === row.arm)));
+const cap = value => Math.max(0, Math.min(100, value));
+const avgWk9Productivity = sum(data.stores, "wk1RevSqFt") / data.stores.length;
 for (const row of data.stores) {
+  assert.ok(close(row.growthScore, cap(50 + row.growth * 200), 1e-9), `Growth score mismatch for ${row.store}`);
+  assert.ok(close(row.conversionScore, cap(50 + row.conversionChange * 1000), 1e-9), `Conversion score mismatch for ${row.store}`);
+  assert.ok(close(row.loanScore, cap(row.wk1Loan / 0.25 * 100), 1e-9), `Wk9 loan score mismatch for ${row.store}`);
+  assert.ok(close(row.tradeScore, cap(row.wk1Trade / 0.10 * 100), 1e-9), `Wk9 trade-in score mismatch for ${row.store}`);
+  assert.ok(close(row.revSqFtScore, cap(row.wk1RevSqFt / avgWk9Productivity * 100), 1e-9), `Wk9 productivity score mismatch for ${row.store}`);
   const recomputed = Math.round(((
-    row.growthScore * 0.25 + row.conversionScore * 0.20 +
-    row.loanScore * 0.15 + row.tradeScore * 0.10 +
+    row.growthScore * 0.25 + row.conversionScore * 0.15 +
+    row.loanScore * 0.20 + row.tradeScore * 0.20 +
     row.revSqFtScore * 0.10 + row.riskScore * 0.10
-  ) / 0.90) * 10) / 10;
+  )) * 10) / 10;
   assert.ok(close(recomputed, row.reScore, 0.051), `Retail Excellence mismatch for ${row.store}`);
 }
+assert.deepEqual(data.stores.map(row => row.reRank).sort((a,b) => a-b), Array.from({length:69}, (_,i) => i+1));
 
 assert.ok(close(sum(data.stores, "wk13Revenue"), 377726825.96));
 assert.ok(close(sum(data.stores, "wk1Revenue"), 324599908.46));
@@ -44,8 +52,8 @@ assert.doesNotMatch(html, /Wk8 vs Wk7|Wk7 → Wk8|25 Aug 2026|20260825/);
 assert.doesNotMatch(html, />Actual</);
 for (const text of [
   "Retail Excellence — Score Mathematics",
-  "Growth×25% + Conversion×20% + Loan×15% + Trade-in×10% + Productivity×10% + Risk×10%",
-  "Wk8 overall loan attach ÷ 25% × 100",
+  "Growth×25% + Conversion×15% + Loan×20% + Trade-in×20% + Productivity×10% + Risk×10%",
+  "Wk9 overall loan attach ÷ 25% × 100",
   "Green = 100 · Amber = 65 · Red = 35"
 ]) assert.ok(html.includes(text), `missing Retail Excellence methodology: ${text}`);
 assert.ok(html.includes("#boardroom .priority .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}"));
