@@ -63,7 +63,13 @@
     const currentArmRevenue = sum(arms, "wk1Revenue");
     const priorStoreRevenue = sum(stores, "wk13Revenue");
     const priorArmRevenue = sum(arms, "wk13Revenue");
-    const ratesValid = stores.every(row => ["wk1Conversion", "wk13Conversion", "wk13Loan", "wk13Trade"].every(key => row[key] == null || (Number(row[key]) >= 0 && Number(row[key]) <= 1)));
+    const ratesValid = stores.every(row =>
+      ["wk1Loan", "wk13Loan", "wk1Trade", "wk13Trade"].every(key =>
+        row[key] == null || (Number(row[key]) >= 0 && Number(row[key]) <= 1)
+      ) && ["wk1Conversion", "wk13Conversion"].every(key =>
+        row[key] == null || Number(row[key]) >= 0
+      )
+    );
     return {
       source: config.governance && config.governance.source,
       coverage: `${stores.length} stores · ${arms.length} ARMs`,
@@ -74,7 +80,7 @@
         check("Store-to-ARM mapping", allMapped, allMapped ? "Every store maps to a listed ARM" : "One or more stores maps to an unknown ARM"),
         check("Current revenue roll-up", close(currentStoreRevenue, currentArmRevenue), `Store ₹${(currentStoreRevenue / 1e7).toFixed(2)} Cr · ARM ₹${(currentArmRevenue / 1e7).toFixed(2)} Cr; review summary scope`, "low"),
         check("Comparable revenue roll-up", close(priorStoreRevenue, priorArmRevenue), `Store ₹${(priorStoreRevenue / 1e7).toFixed(2)} Cr · ARM ₹${(priorArmRevenue / 1e7).toFixed(2)} Cr; review summary scope`, "low"),
-        check("Rate ranges", ratesValid, ratesValid ? "Conversion and attachment rates are within 0–100%" : "A conversion or attachment rate is outside 0–100%")
+        check("Rate ranges", ratesValid, ratesValid ? "Attachment rates are within 0–100%; conversion ratios are non-negative" : "An attachment rate is outside 0–100% or a conversion ratio is negative")
       ]
     };
   }
