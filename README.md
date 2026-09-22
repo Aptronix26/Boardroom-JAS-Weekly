@@ -1,6 +1,6 @@
 # Boardroom Intelligence — Weekly Comparison
 
-Standalone weekly comparison dashboard for Wk9 versus Wk8 performance, executive KPIs, store and ARM exploration, retail-excellence signals, and priority actions.
+Standalone weekly comparison dashboard for Wk12 versus Wk11 performance, executive KPIs, store and ARM exploration, retail-excellence signals, and priority actions.
 
 ## Run and deploy
 
@@ -12,7 +12,7 @@ Run `npm test` with Node.js 18 or later.
 
 ## Data note
 
-The dashboard is a static snapshot refreshed from the validated weekly performance workbook on 31 Aug 2026. It covers 69 stores and 15 ARMs. Store and ARM revenue reconcile to ₹32.46 Cr for Wk9 and ₹37.77 Cr for Wk8.
+The dashboard is a static snapshot refreshed from the validated weekly performance workbook on 21 Sep 2026. It covers 69 stores and 15 ARMs. Store and ARM revenue reconcile to ₹57.54 Cr for Wk12 and ₹32.48 Cr for Wk11.
 
 The workbook's 68-row mapping sheet omits Aptronix Begumpet. Its verified assignment to Abdul Khadeer from `Store Metrics Calc` is retained. Aggregate conversion, loan attach, and trade-in attach use weighted network numerators and denominators. 3P and Apple accessory attach rates remain excluded because the workbook does not include the Raw attach % sheet.
 
